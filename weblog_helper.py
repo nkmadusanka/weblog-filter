@@ -35,7 +35,7 @@ class WebLogHelper():
         Raises:
             ValueError: If given string is not an IP or an invalid IP
         """
-        self.filter_ip_list = [ipaddress.ip_address(ip)]
+        self.filter_ip_list = [str(ipaddress.ip_address(ip))]
 
     def set_log_file(self, log_file):
         """Check if a given log files name is valid and if valid stores as an class variable.
@@ -64,7 +64,7 @@ class WebLogHelper():
             log_line (str): log line
         """
         ip_on_log = log_line.split(' ', 1)[0]  # Split the log to 2 sub strs by space and get the first, it is the ip
-        if ipaddress.ip_address(ip_on_log) in self.filter_ip_list:  # for an ip filter_ip_list lenth is 1, same as matching str
+        if ip_on_log in self.filter_ip_list:  # for an ip filter_ip_list lenth is 1, same as matching str
             print(log_line, end='')
 
 def setup_commandline_options():
