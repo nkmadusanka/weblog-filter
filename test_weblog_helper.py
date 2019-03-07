@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from unittest import TestCase
+from unittest import TestCase, main
 from weblog_helper import setup_commandline_options, WebLogHelper, LogFileParameterException
 from argparse import ArgumentParser
 import ipaddress
@@ -42,3 +42,6 @@ class WebLogHelperTest(TestCase):
 
     def test_init_raise_exception_when_log_file_is_empty(self):
         self.assertRaises(LogFileParameterException, WebLogHelper, '192.168.0.1', '')
+
+if __name__ == '__main__':
+    main()
