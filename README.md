@@ -17,7 +17,7 @@ For zsh fans
 ```
 > mkdir ~/.mybin
 > cp weblog_helper ~/.mybin
-> echo "export PATH=$PATH:$HOME/.mybin" >> ~/.zshrc
+> echo 'export PATH=$PATH:$HOME/.mybin' >> ~/.zshrc
 > source ~/.zshrc
 ```
 
