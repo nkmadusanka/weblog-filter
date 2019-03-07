@@ -2,6 +2,23 @@
 
 from argparse import ArgumentParser
 
+class WebLogHelper():
+    """Provides functionality to filter a given webserver logfile based on a given IP address
+        
+    Note:
+        This utility class works with common websever log formats where IP address logged as the first string
+        of the log line and do not support log formats such as JSON or XML
+    """
+    def __init__(self, filter_ip, log_file):
+        """Class constructor
+
+        Args:
+            filter_ip (str): IP address to filter the log
+            log_file (str): relative or absolute path to the log file
+        """
+        self.filter_ip = filter_ip
+        self.web_log_file = log_file
+
 def setup_commandline_options():
     """Setup CLI switches for the weblog_helper script
 
