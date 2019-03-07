@@ -26,22 +26,45 @@ class WebLogHelper():
         self.set_log_file(log_file)
 
     def convert_ip_to_list(self, ip):
+        """Convert given IP address string to a list of a IPv(4|6) address object and set it to the class variable.
+        Will raise an ValueError exception if given ip is not valid
+
+        Args:
+            ip (str): IP address to convert to a list
+
+        Raises:
+            ValueError: If given string is not an IP or an invalid IP
+        """
         self.filter_ip_list = [ipaddress.ip_address(ip)]
 
     def set_log_file(self, log_file):
+        """Check if a given log files name is valid and if valid stores as an class variable.
+
+        Args:
+            log_file (str): log file name to check
+
+        Raises:
+            LogFileParameterException: A custom exception indicating the file name is invalid
+        """
         if log_file:
             self.web_log_file = log_file
         else:
             raise LogFileParameterException()
 
     def run_filter(self):
+        """Filter the current log with the current IP address"""
         with open(self.web_log_file) as log_content:
             for line in log_content:
                 self.print_filtered_log_line(line)
 
     def print_filtered_log_line(self, log_line):
-        ip_on_log = log_line.split(' ')[0]
-        if ipaddress.ip_address(ip_on_log) in self.filter_ip_list:
+        """Print given log line if it matches the filtering ip
+        
+        Args:
+            log_line (str): log line
+        """
+        ip_on_log = log_line.split(' ', 1)[0]  # Split the log to 2 sub strs by space and get the first, it is the ip
+        if ipaddress.ip_address(ip_on_log) in self.filter_ip_list:  # for an ip filter_ip_list lenth is 1, same as matching str
             print(log_line, end='')
 
 def setup_commandline_options():
