@@ -11,13 +11,13 @@ You need Python3 to use this utility. You can use your package manager to instal
 > cd weblog-filter
 > chmod +x weblog_helper
 ```
-- If you have regular usage of this utility, it will be much easier if you add this script as a regular command available on your shell. Either you can copy to `/usr/local/bin/` use your own directory and add it to the PATH variable on your `bash`/`zsh` profiles.
+- If you have regular usage of this utility, it will be much easier if you add this script as a regular command available on your shell. Either you can copy to `/usr/local/bin/` or use your own directory and add it to the PATH variable on your `bash`/`zsh` profiles.
 
 For zsh fans
 ```
 > mkdir ~/.mybin
 > cp weblog_helper ~/.mybin
-> echo "export PATH=$PATH:$HOME/.mybin" > ~/.zshrc
+> echo "export PATH=$PATH:$HOME/.mybin" >> ~/.zshrc
 > source ~/.zshrc
 ```
 
