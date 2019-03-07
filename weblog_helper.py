@@ -79,8 +79,8 @@ def setup_commandline_options():
     argument_parser = ArgumentParser(description="Filter a web log based on an given IP address or a CIDR")
     argument_parser._action_groups.pop()  # argparse treat -- switches as optional, simple hack to make them required args
     required = argument_parser.add_argument_group("Required Arguments")
-    required.add_argument("--ip", help="Valid IP address or a CIDR")
-    required.add_argument("--log", help="Log file to analize")
+    required.add_argument("--ip", "-i", help="Valid IP address or a CIDR")
+    required.add_argument("--log", "-l", help="Log file to analize")
     return argument_parser
 
 if __name__ == '__main__':
