@@ -1,6 +1,12 @@
 #!/usr/bin/env python3
 
 from argparse import ArgumentParser
+import ipaddress
+
+class LogFileParameterException(BaseException):
+    """Custom Exception to specifically indicate that given log file name is invalid."""
+    def __init__(self, *args, **kwargs):
+        return super().__init__(*args, **kwargs)
 
 class WebLogHelper():
     """Provides functionality to filter a given webserver logfile based on a given IP address
@@ -16,8 +22,27 @@ class WebLogHelper():
             filter_ip (str): IP address to filter the log
             log_file (str): relative or absolute path to the log file
         """
-        self.filter_ip = filter_ip
-        self.web_log_file = log_file
+        self.convert_ip_to_list(filter_ip)
+        self.set_log_file(log_file)
+
+    def convert_ip_to_list(self, ip):
+        self.filter_ip_list = [ipaddress.ip_address(ip)]
+
+    def set_log_file(self, log_file):
+        if log_file:
+            self.web_log_file = log_file
+        else:
+            raise LogFileParameterException()
+
+    def run_filter(self):
+        with open(self.web_log_file) as log_content:
+            for line in log_content:
+                self.print_filtered_log_line(line)
+
+    def print_filtered_log_line(self, log_line):
+        ip_on_log = log_line.split(' ')[0]
+        if ipaddress.ip_address(ip_on_log) in self.filter_ip_list:
+            print(log_line)
 
 def setup_commandline_options():
     """Setup CLI switches for the weblog_helper script
@@ -35,4 +60,13 @@ def setup_commandline_options():
 if __name__ == '__main__':
     arg_parser = setup_commandline_options()
     args = arg_parser.parse_args()
-    print(args)
+    try:
+        log_filter = WebLogHelper(args.ip, args.log)
+        log_filter.run_filter()
+    except LogFileParameterException:
+        print("Did you forgot to mention the log file?")
+        arg_parser.print_usage()
+    except ValueError:
+        print("%s is not a valid IP address" % args.ip)
+    except FileNotFoundError:
+        print("Log file '%s' does not exist." % args.log)
