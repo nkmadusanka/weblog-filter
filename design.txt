@@ -1,0 +1,78 @@
+Brainstorming the design
+
+Command
+    weblog_helper --ip <ip/cidr> --log <logFile>
+        Design
+            What if too many log messages to print? --> send to a file if asked?
+                --out <output file> --> enhancement, check later
+            Lazy engineer?
+                Short switches; -i, -l, -o --> later
+
+Program
+    Flow
+        Run command
+        Check args given
+            not? --> alert
+        Check args valid
+            ip valid --> research how
+            ip cidr valid --> above
+                no? --> alert
+            valid log file path --> check exists
+                no? -->alert
+        Start filtering
+            match ip == log ip
+                get the ip on log
+                    regex?
+                    string methods? split?
+                or just find log line contains it? str.startswith( ip )
+                    cidr? have to find all ips and iterate --> BAD IDEA
+
+Research
+    args
+        https://docs.python.org/3.6/library/argparse.html
+    ip validation
+        https://docs.python.org/3/library/ipaddress.html
+        No validation function it seems --> RECHECK
+    cidr validation
+        above
+    getting ips of a cidr
+        https://docs.python.org/3/library/ipaddress.html
+        list(ip_network('192.0.2.0/29').hosts()) --> check in list --> expensive
+    matching
+        cidr --> check in list
+        ip --> string match? check in list?
+            check in list
+                easy to implement cidr match, only one matching function
+
+NOTES:
+    keep the ips of the cidr, do not calculate every time --> global var
+    convert ip str to a list, one element, not expensive when checking --> logIP in [ ipstr ]
+    getting log ip;
+        use logline.split(' ', 1)[0]
+
+    matching ip to the log line
+        logline.startswith( ip )
+        for ip in [ cidr ]:
+            logline.startswith( ip )
+
+        logip = logline.split(' ', 1)[0]
+        if logip in [ cidr ]:
+            match completes when matching element found, do not iterate to the end of the list if found
+
+    TESTS?
+        lets cover the functions
+        TDD? overkill==True
+        overkill? may be
+        smart choice? indeed
+    
+
+Valuable tool? why not
+Publish? do it after giving lazy engineer switches
+
+NAME:
+    logFilter
+    pyFilter
+    logFi
+    pyLogFI
+    lo.fi
+    py.fi
