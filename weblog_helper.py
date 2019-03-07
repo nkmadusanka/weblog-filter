@@ -42,7 +42,7 @@ class WebLogHelper():
     def print_filtered_log_line(self, log_line):
         ip_on_log = log_line.split(' ')[0]
         if ipaddress.ip_address(ip_on_log) in self.filter_ip_list:
-            print(log_line)
+            print(log_line, end='')
 
 def setup_commandline_options():
     """Setup CLI switches for the weblog_helper script
