@@ -55,6 +55,17 @@ class WebLogHelperTest(TestCase):
         print_mock.assert_called_with('31.184.238.128 - - [02/Jun/2015:17:00:12 -0700] "GET /logs/access.log HTTP/1.1" 200 2145998\n', end='')
     
     @patch("weblog_helper.print", autospec=True)
+    def test_run_filter_filter_log_by_ip(self, print_mock):
+        helper = weblog_helper.WebLogHelper('178.93.28.59', './test-data/small.log')
+        print_calls = [ call('178.93.28.59 - - [02/Jun/2015:17:06:06 -0700] "GET /logs/access_150122.log HTTP/1.1" 200 3240056\n', end=''),
+                    call('178.93.28.59 - - [02/Jun/2015:17:06:09 -0700] "GET /logs/access_150122.log HTTP/1.1" 200 3240056\n', end=''),
+                    call('178.93.28.59 - - [02/Jun/2015:17:06:10 -0700] "GET /logs/access_150122.log HTTP/1.1" 200 3240056\n', end=''),
+                    call('178.93.28.59 - - [02/Jun/2015:17:06:11 -0700] "GET /logs/access_150122.log HTTP/1.1" 200 720088\n', end=''),
+                    call('178.93.28.59 - - [02/Jun/2015:17:06:11 -0700] "GET /logs/access_150122.log HTTP/1.1" 200 3240056\n', end='')]
+        helper.run_filter()
+        print_mock.assert_has_calls(print_calls, any_order=False)
+    
+    @patch("weblog_helper.print", autospec=True)
     def test_run_filter_filter_log_by_cidr(self, print_mock):
         helper = weblog_helper.WebLogHelper('180.76.15.0/24', './test-data/small.log')
         print_calls = [ call('180.76.15.135 - - [02/Jun/2015:17:05:23 -0700] "GET /logs/access_140730.log HTTP/1.1" 200 979626\n', end=''),
