@@ -1,4 +1,13 @@
 #!/usr/bin/env python3
+"""This can be used to filter web server logs based on
+an IP address or a CIDR block.
+
+Usage:
+    weblog_helper --ip <IP or CIDR> --log <Web server log file>
+
+    --ip / -i : IP Address or CIDR block
+    --log / -l : Web server log file, path can be relative or absolute
+"""
 
 from argparse import ArgumentParser
 import ipaddress
