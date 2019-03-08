@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 from unittest import TestCase, main
-# from weblog_helper import setup_commandline_options, WebLogHelper, LogFileParameterException
 import weblog_helper
 from argparse import ArgumentParser
 import ipaddress
