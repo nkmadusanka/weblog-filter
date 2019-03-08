@@ -6,14 +6,16 @@ import ipaddress
 class LogFileParameterException(BaseException):
     """Custom Exception to specifically indicate that given log file name is invalid."""
     def __init__(self, *args, **kwargs):
-        return super().__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
 class WebLogHelper():
-    """Provides functionality to filter a given webserver logfile based on a given IP address or a CIDR
-        
+    """Provides functionality to filter a given webserver logfile
+    based on a given IP address or a CIDR
+
     Note:
-        This utility class works with common websever log formats where IP address logged as the first string
-        of the log line and do not support log formats such as JSON or XML
+        This utility class works with common websever log formats where IP address
+        logged as the first string of the log line and do not support log formats
+        such as JSON or XML
     """
     def __init__(self, filter_ip, log_file):
         """Class constructor
@@ -26,8 +28,9 @@ class WebLogHelper():
         self.set_log_file(log_file)
 
     def convert_ip_to_list(self, ip_or_cidr):
-        """Convert given IP address or CIDR string to a list of IPv(4|6) address string(s) and set it to the class variable.
-        Will raise an ValueError exception if given ip or CIDR is not valid
+        """Convert given IP address or CIDR string to a list of IPv(4|6) address string(s)
+        and set it to the class variable. Will raise an ValueError exception if given ip or CIDR
+        is not valid.
 
         Args:
             ip (str): IP address or CIDR to convert to a list of ip(s)
@@ -62,11 +65,11 @@ class WebLogHelper():
 
     def print_filtered_log_line(self, log_line):
         """Print given log line if it matches the filtering ip(s)
-        
+
         Args:
             log_line (str): log line
         """
-        ip_on_log = log_line.split(' ', 1)[0]  # Split the log to 2 sub strs by space and get the first, it is the ip
+        ip_on_log = log_line.split(' ', 1)[0]  # First string is the ip
         if ip_on_log in self.filter_ip_list:  # Returns after finding first match
             print(log_line, end='')
 
@@ -76,23 +79,25 @@ def setup_commandline_options():
     Returns:
         ArgumentParser instance
     """
-    argument_parser = ArgumentParser(description="Filter a web log based on an given IP address or a CIDR")
-    argument_parser._action_groups.pop()  # argparse treat -- switches as optional, simple hack to make them required args
+    argument_parser = ArgumentParser(
+        description="Filter a web log based on an given IP address or a CIDR")
+    argument_parser._action_groups.pop()
+    # argparse treat -- switches as optional, simple hack to make them required args
     required = argument_parser.add_argument_group("Required Arguments")
     required.add_argument("--ip", "-i", help="Valid IP address or a CIDR")
     required.add_argument("--log", "-l", help="Log file to analize")
     return argument_parser
 
 if __name__ == '__main__':
-    arg_parser = setup_commandline_options()
-    args = arg_parser.parse_args()
+    ARG_PARSER = setup_commandline_options()
+    ARGS = ARG_PARSER.parse_args()
     try:
-        log_filter = WebLogHelper(args.ip, args.log)
-        log_filter.run_filter()
+        LOG_FILTER = WebLogHelper(ARGS.ip, ARGS.log)
+        LOG_FILTER.run_filter()
     except LogFileParameterException:
         print("Did you forgot to mention the log file?")
-        arg_parser.print_usage()
+        ARG_PARSER.print_usage()
     except ValueError:
-        print("%s is not a valid IP address or a CIDR" % args.ip)
+        print("%s is not a valid IP address or a CIDR" % ARGS.ip)
     except FileNotFoundError:
-        print("Log file '%s' does not exist." % args.log)
+        print("Log file '%s' does not exist." % ARGS.log)
